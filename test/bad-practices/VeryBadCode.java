@@ -1,0 +1,1 @@
+public class VeryBadCode { public static String globalVariable = "BAD"; public void methodWithTooManyParameters(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j) { System.out.println("This is very bad code"); } }

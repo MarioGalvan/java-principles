@@ -447,4 +447,4 @@ class NotificationService {
     }
 }
 
-// Comentario agregado para probar el sistema de revisión de IA 
+// Comentario agregado para probar el sistema de revisión de IA // Test comment
