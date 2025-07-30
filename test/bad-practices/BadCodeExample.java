@@ -216,6 +216,146 @@ public class BadCodeExample {
         email.sendNotification("Processing: " + input);
         return input.toUpperCase();
     }
+    
+    // NUEVO: Método extremadamente largo para probar el sistema
+    public void veryLongMethodWithManyResponsibilities(String input, String output, String config, String log, String cache, String db, String email, String network, String security, String backup, String monitor, String report, String notify, String validate, String transform, String process, String store, String retrieve, String update, String delete, String create, String read, String write, String execute, String run, String start, String stop, String pause, String resume, String cancel, String confirm, String reject, String approve, String deny, String accept, String decline, String submit, String save, String load, String export, String import, String sync, String backup, String restore, String migrate, String upgrade, String downgrade, String rollback, String forward, String backward, String left, String right, String up, String down, String north, String south, String east, String west, String center, String middle, String top, String bottom, String front, String back, String inside, String outside, String internal, String external, String local, String remote, String online, String offline, String active, String inactive, String enabled, String disabled, String visible, String hidden, String public, String private, String protected, String default, String custom, String standard, String special, String normal, String abnormal, String regular, String irregular, String common, String uncommon, String frequent, String rare, String often, String seldom, String always, String never, String sometimes, String usually, String typically, String generally, String specifically, String particularly, String especially, String mainly, String primarily, String secondarily, String tertiary, String quaternary, String quinary, String senary, String septenary, String octonary, String nonary, String denary) {
+        // Este método es extremadamente largo y tiene demasiados parámetros
+        // Debería ser detectado por el sistema de revisión de IA
+        
+        // Validación de todos los parámetros
+        if (input == null || input.isEmpty()) {
+            System.out.println("Input is required");
+            return;
+        }
+        if (output == null || output.isEmpty()) {
+            System.out.println("Output is required");
+            return;
+        }
+        if (config == null || config.isEmpty()) {
+            System.out.println("Config is required");
+            return;
+        }
+        // ... más validaciones para todos los parámetros
+        
+        // Procesamiento complejo
+        String result = input.toUpperCase() + output.toLowerCase() + config.trim();
+        
+        // Múltiples operaciones
+        db.save(result);
+        cache.put("result", result);
+        email.send(result);
+        network.send(result);
+        security.validate(result);
+        backup.create(result);
+        monitor.track(result);
+        report.generate(result);
+        notify.send(result);
+        validate.check(result);
+        transform.convert(result);
+        process.execute(result);
+        store.save(result);
+        retrieve.get(result);
+        update.modify(result);
+        delete.remove(result);
+        create.build(result);
+        read.fetch(result);
+        write.store(result);
+        execute.run(result);
+        run.start(result);
+        start.begin(result);
+        stop.end(result);
+        pause.wait(result);
+        resume.continue(result);
+        cancel.abort(result);
+        confirm.ok(result);
+        reject.no(result);
+        approve.yes(result);
+        deny.no(result);
+        accept.yes(result);
+        decline.no(result);
+        submit.send(result);
+        save.store(result);
+        load.fetch(result);
+        export.download(result);
+        import.upload(result);
+        sync.match(result);
+        backup.copy(result);
+        restore.recover(result);
+        migrate.move(result);
+        upgrade.better(result);
+        downgrade.worse(result);
+        rollback.undo(result);
+        forward.next(result);
+        backward.prev(result);
+        left.west(result);
+        right.east(result);
+        up.north(result);
+        down.south(result);
+        north.up(result);
+        south.down(result);
+        east.right(result);
+        west.left(result);
+        center.middle(result);
+        middle.center(result);
+        top.above(result);
+        bottom.below(result);
+        front.ahead(result);
+        back.behind(result);
+        inside.internal(result);
+        outside.external(result);
+        internal.inside(result);
+        external.outside(result);
+        local.near(result);
+        remote.far(result);
+        online.connected(result);
+        offline.disconnected(result);
+        active.enabled(result);
+        inactive.disabled(result);
+        enabled.active(result);
+        disabled.inactive(result);
+        visible.shown(result);
+        hidden.hidden(result);
+        public.open(result);
+        private.closed(result);
+        protected.secure(result);
+        default.normal(result);
+        custom.special(result);
+        standard.regular(result);
+        special.custom(result);
+        normal.standard(result);
+        abnormal.irregular(result);
+        regular.normal(result);
+        irregular.abnormal(result);
+        common.frequent(result);
+        uncommon.rare(result);
+        frequent.often(result);
+        rare.seldom(result);
+        often.frequent(result);
+        seldom.rare(result);
+        always.constant(result);
+        never.zero(result);
+        sometimes.occasional(result);
+        usually.common(result);
+        typically.generally(result);
+        generally.typically(result);
+        specifically.particularly(result);
+        particularly.especially(result);
+        especially.mainly(result);
+        mainly.primarily(result);
+        primarily.first(result);
+        secondarily.second(result);
+        tertiary.third(result);
+        quaternary.fourth(result);
+        quinary.fifth(result);
+        senary.sixth(result);
+        septenary.seventh(result);
+        octonary.eighth(result);
+        nonary.ninth(result);
+        denary.tenth(result);
+        
+        // Logging final
+        System.out.println("Very long method completed with result: " + result);
+    }
 }
 
 // Anti-patrón: Clases anémicas sin comportamiento
@@ -299,4 +439,6 @@ class NotificationService {
     public void send(String message) {
         System.out.println("Notification: " + message);
     }
-} 
+}
+
+// Comentario agregado para probar el sistema de revisión de IA 
