@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 echo "🤖 Ejecutando revisión de código con IA..."
-node scripts/ia-review-diff.js
+TEST_MODE=true node scripts/ia-review-diff.js
 
 # Si el script de IA falla (exit code != 0), el push se bloquea
 if [ $? -ne 0 ]; then

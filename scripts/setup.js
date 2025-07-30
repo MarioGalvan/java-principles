@@ -100,10 +100,11 @@ function createEnvTemplate() {
   const envTemplate = `# API Keys para modelos de IA
 # Configura al menos una de estas variables
 
-# OpenAI (recomendado)
+# OpenAI API (recomendado)
 OPENAI_API_KEY=sk-your-openai-api-key-here
 
 # Alternativas
+DEEPSEEK_API_KEY=sk-your-deepseek-api-key-here
 DEEPSEEK_API_KEY=sk-your-deepseek-api-key-here
 CLAUDE_API_KEY=sk-your-claude-api-key-here
 
@@ -176,6 +177,7 @@ function testSetup() {
     if (!hasApiKey) {
       log('⚠️  No hay API keys configuradas', 'yellow');
       log('💡 Configura las variables de entorno en .env', 'yellow');
+      log('💡 Para usar Cursor API: Settings > API > Copiar Admin API Key', 'yellow');
       log('💡 O ejecuta: npm run test-review (con API key)', 'yellow');
     } else {
       log('✅ API keys detectadas', 'green');

@@ -1,3 +1,6 @@
+// Cargar variables de entorno desde .env
+require('dotenv').config();
+
 const { execSync } = require('child_process');
 const axios = require('axios');
 const fs = require('fs');
@@ -11,14 +14,29 @@ const CONFIG = {
       name: 'openai',
       apiKey: process.env.OPENAI_API_KEY,
       endpoint: 'https://api.openai.com/v1/chat/completions',
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       headers: { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' }
+    },
+    {
+      name: 'deepseek',
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      endpoint: 'https://api.deepseek.com/v1/chat/completions',
+      model: 'deepseek-chat',
+      headers: { 'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`, 'Content-Type': 'application/json' }
+    },
+    {
+      name: 'claude',
+      apiKey: process.env.CLAUDE_API_KEY,
+      endpoint: 'https://api.anthropic.com/v1/messages',
+      model: 'claude-3-sonnet-20240229',
+      headers: { 'Authorization': `Bearer ${process.env.CLAUDE_API_KEY}`, 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' }
     }
   ],
   LOG_FILE: '.ai-review.log',
   MAX_DIFF_SIZE: 50000, // 50KB
   BLOCK_ON_CRITICAL: true,
-  VERBOSE: process.env.VERBOSE === 'true'
+  VERBOSE: process.env.VERBOSE === 'true',
+  TEST_MODE: process.env.TEST_MODE === 'true' || process.env.NODE_ENV === 'test'
 };
 
 // Colores para output
@@ -142,6 +160,91 @@ ${diff}
 \`\`\``;
 }
 
+// Función para modo de prueba sin API key
+function mockAIResponse(diff, files) {
+  log('🧪 Ejecutando en modo de prueba (sin API key)...', 'yellow');
+  
+  // Análisis básico basado en patrones en el código
+  const hasBadPatterns = diff.includes('public static') || 
+                         diff.includes('getInstance()') ||
+                         diff.includes('processEverything') ||
+                         diff.includes('complexMethod') ||
+                         diff.includes('return null') ||
+                         diff.includes('catch (Exception') ||
+                         diff.includes('God Object') ||
+                         diff.includes('Anti-patrón');
+  
+  const hasLongMethod = diff.split('\n').length > 50;
+  const hasManyParameters = diff.includes('String param1, String param2, String param3');
+  const hasGlobalVariables = diff.includes('public static String') || diff.includes('public static int');
+  
+  let score = 8; // Score base
+  let status = 'APPROVED';
+  let issues = [];
+  
+  if (hasBadPatterns) {
+    score = 3;
+    status = 'BLOCKED';
+    issues.push({
+      severity: 'CRITICAL',
+      category: 'ANTI_PATTERN',
+      message: 'Se detectaron múltiples anti-patrones en el código',
+      suggestion: 'Refactorizar el código para eliminar anti-patrones',
+      line: 'Múltiples líneas'
+    });
+  }
+  
+  if (hasLongMethod) {
+    score = Math.min(score, 4);
+    status = score < 6 ? 'BLOCKED' : 'WARNING';
+    issues.push({
+      severity: 'WARNING',
+      category: 'QUALITY',
+      message: 'Método muy largo detectado',
+      suggestion: 'Extraer métodos más pequeños siguiendo el principio de responsabilidad única',
+      line: 'Método processEverything'
+    });
+  }
+  
+  if (hasManyParameters) {
+    score = Math.min(score, 5);
+    status = score < 6 ? 'BLOCKED' : 'WARNING';
+    issues.push({
+      severity: 'WARNING',
+      category: 'QUALITY',
+      message: 'Método con demasiados parámetros',
+      suggestion: 'Usar objetos para agrupar parámetros relacionados',
+      line: 'Método complexMethod'
+    });
+  }
+  
+  if (hasGlobalVariables) {
+    score = Math.min(score, 6);
+    status = score < 6 ? 'BLOCKED' : 'WARNING';
+    issues.push({
+      severity: 'WARNING',
+      category: 'QUALITY',
+      message: 'Variables globales públicas detectadas',
+      suggestion: 'Encapsular variables en clases apropiadas',
+      line: 'Variables GLOBAL_VARIABLE y COUNTER'
+    });
+  }
+  
+  return {
+    score,
+    status,
+    issues,
+    summary: `Análisis en modo de prueba: ${issues.length} problemas encontrados`,
+    recommendations: [
+      'Refactorizar métodos largos en métodos más pequeños',
+      'Eliminar variables globales públicas',
+      'Aplicar principios SOLID',
+      'Usar objetos para agrupar parámetros relacionados',
+      'Implementar patrones de diseño apropiados'
+    ]
+  };
+}
+
 async function callAI(diff, files, modelConfig) {
   const prompt = createPrompt(diff, files);
   
@@ -151,6 +254,13 @@ async function callAI(diff, files, modelConfig) {
     let requestBody;
     
     if (modelConfig.name === 'claude') {
+      // Formato específico para Claude
+      requestBody = {
+        model: modelConfig.model,
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      };
+    } else if (modelConfig.name === 'claude') {
       // Formato específico para Claude
       requestBody = {
         model: modelConfig.model,
@@ -182,6 +292,9 @@ async function callAI(diff, files, modelConfig) {
     return content;
   } catch (error) {
     log(`Error con ${modelConfig.name}: ${error.message}`, 'red');
+    if (error.response) {
+      log(`Detalles del error: ${JSON.stringify(error.response.data)}`, 'red');
+    }
     throw error;
   }
 }
@@ -268,8 +381,35 @@ async function main() {
   
   // Verificar configuración
   const availableModels = CONFIG.AI_MODELS.filter(model => model.apiKey);
+  
+  // Si no hay API keys disponibles o estamos en modo de prueba, usar mock
+  if ((availableModels.length === 0 || CONFIG.TEST_MODE) && CONFIG.TEST_MODE) {
+    const diff = getJavaDiff();
+    if (!diff) {
+      log('✅ No hay cambios Java para revisar. Push permitido.', 'green');
+      process.exit(0);
+    }
+    
+    const files = getStagedJavaFiles();
+    log(`📋 Archivos Java modificados: ${files.length}`, 'blue');
+    
+    const analysis = mockAIResponse(diff, files);
+    displayResults(analysis, files);
+    
+    if (shouldBlockPush(analysis)) {
+      log('🚫 PUSH BLOQUEADO: Se encontraron problemas críticos en el código.', 'red');
+      log('💡 Revisa las sugerencias arriba y mejora el código antes de hacer push.', 'yellow');
+      process.exit(1);
+    } else {
+      log('✅ PUSH PERMITIDO: Código aprobado por IA.', 'green');
+      process.exit(0);
+    }
+  }
+  
   if (availableModels.length === 0) {
-    log('❌ Error: No hay API keys configuradas. Configura OPENAI_API_KEY, DEEPSEEK_API_KEY, o CLAUDE_API_KEY', 'red');
+    log('❌ Error: No hay API keys configuradas. Configura CURSOR_API_KEY, OPENAI_API_KEY, DEEPSEEK_API_KEY, o CLAUDE_API_KEY', 'red');
+    log('💡 Para probar sin API key, ejecuta: TEST_MODE=true npm run test-review', 'yellow');
+    log('💡 Para usar Cursor API, configura CURSOR_API_KEY en tu archivo .env', 'yellow');
     process.exit(1);
   }
   

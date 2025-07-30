@@ -1,6 +1,7 @@
 module.exports = {
   // Configuración de modelos de IA (prioridad)
   aiModels: [
+    
     {
       name: 'openai',
       apiKey: process.env.OPENAI_API_KEY,

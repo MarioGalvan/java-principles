@@ -35,15 +35,23 @@ npx husky install
 Crea un archivo `.env` en la raíz del proyecto:
 
 ```bash
-# OpenAI (recomendado)
-OPENAI_API_KEY=sk-your-openai-api-key
+# Cursor API (recomendado - más fácil de configurar)
+CURSOR_API_KEY=your-cursor-admin-api-key
 
 # Alternativas
+OPENAI_API_KEY=sk-your-openai-api-key
 DEEPSEEK_API_KEY=sk-your-deepseek-api-key
 CLAUDE_API_KEY=sk-your-claude-api-key
 ```
 
-### 4. Verificar instalación
+### 4. Obtener Cursor Admin API Key (Recomendado)
+
+1. **Abrir Cursor** y ir a Settings (⌘/Ctrl + ,)
+2. **Buscar "API Keys"** en la configuración
+3. **Copiar la API Key** que aparece
+4. **Pegar en el archivo `.env`** como `OPENAI_API_KEY=tu-api-key`
+
+### 5. Verificar instalación
 
 ```bash
 # Probar el sistema
@@ -56,7 +64,7 @@ npm run test-review
 
 | Variable | Descripción | Requerido |
 |----------|-------------|-----------|
-| `OPENAI_API_KEY` | API Key de OpenAI | Sí (uno de los tres) |
+| `OPENAI_API_KEY` | API Key de OpenAI | Sí (uno de los cuatro) |
 | `DEEPSEEK_API_KEY` | API Key de DeepSeek | No |
 | `CLAUDE_API_KEY` | API Key de Claude | No |
 | `VERBOSE` | Modo verboso (true/false) | No |

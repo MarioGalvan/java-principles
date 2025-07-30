@@ -280,4 +280,41 @@ public class SolidViolations {
             System.out.println("Validating user: " + user.getName());
         }
     }
+
+    public class VeryVeryBadCode {
+        public void veryVeryBadCode() {
+            System.out.println("This is very very bad code");
+        }
+        int a = 1;
+        int b = 2;
+        int c = 3;
+        int d = 4;
+        int e = 5;
+        int f = 6;
+        int g = 7;
+        int h = 8;
+        for (int i = 0; i < 10; i++) {
+            System.out.println("This is very very bad code");
+        }
+        while (true) {
+            System.out.println("This is very very bad code");
+        }
+        do {
+            System.out.println("This is very very bad code");
+        }
+        if (a > b) {
+            System.out.println("This is very very bad code");
+        }
+        else {
+            System.out.println("This is very very bad code");
+        }
+        switch (a) {
+            case 1:
+                System.out.println("This is very very bad code");
+                break;
+            case 2:
+                System.out.println("This is very very bad code");
+                break;
+        }
+    }
 } 
