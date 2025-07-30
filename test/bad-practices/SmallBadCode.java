@@ -25,4 +25,4 @@ public class SmallBadCode {
     public String getData() {
         return null;
     }
-} 
+} // Adding more bad code
