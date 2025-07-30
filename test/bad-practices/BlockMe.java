@@ -1,0 +1,1 @@
+public class BlockMe { public static String badGlobal = "VERY BAD"; public void methodWithTooManyParams(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j, String k) { System.out.println("This should be blocked"); } }
