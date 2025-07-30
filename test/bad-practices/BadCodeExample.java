@@ -356,6 +356,12 @@ public class BadCodeExample {
         // Logging final
         System.out.println("Very long method completed with result: " + result);
     }
+    
+    // NUEVO: Método con muchos parámetros para probar bloqueo
+    public void methodWithTooManyParameters(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9, String param10, String param11, String param12, String param13, String param14, String param15, String param16, String param17, String param18, String param19, String param20) {
+        // Este método tiene demasiados parámetros y debería ser detectado
+        System.out.println("Processing with " + param1 + param2 + param3 + param4 + param5);
+    }
 }
 
 // Anti-patrón: Clases anémicas sin comportamiento
