@@ -1,1 +1,2 @@
 public class TestBadCode { public static String globalVar = "BAD"; public void methodWithManyParams(String a, String b, String c, String d, String e, String f) { System.out.println("Too many parameters"); } }
+// Adding more bad code
