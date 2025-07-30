@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🤖 Ejecutando revisión de código con IA..."
+node scripts/ia-review-diff.js
+
+# Si el script de IA falla (exit code != 0), el push se bloquea
+if [ $? -ne 0 ]; then
+    echo "❌ Push bloqueado por la revisión de IA"
+    echo "💡 Revisa los problemas encontrados y mejora el código antes de hacer push"
+    exit 1
+fi
+
+echo "✅ Revisión de IA completada exitosamente"
